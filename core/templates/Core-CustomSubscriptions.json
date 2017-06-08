@@ -1,0 +1,91 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Core-CustomSubscriptions Template. This creates Custom SNS Subscriptions to Standard Topics within the Core Account.",
+
+  "Metadata" : {
+    "AWS::CloudFormation::Interface" : {
+      "ParameterGroups" : [
+        {
+          "Label" : { "default" : "Stack Dependencies" },
+          "Parameters" : [
+            "StandardTopicsStackName"
+          ]
+        }
+      ],
+
+      "ParameterLabels" : {
+        "StandardTopicsStackName" : { "default" : "Standard Topics Stack Name" }
+      }
+    }
+  },
+
+  "Parameters" : {
+    "StandardTopicsStackName" : {
+      "Description" : "Name of the CloudFormation Stack containing Standard Topics.",
+      "Type" : "String",
+      "MinLength" : 2,
+      "MaxLength" : 64,
+      "Default" : "StandardTopics",
+      "AllowedPattern" : "^[A-Z][-a-zA-Z0-9]*$",
+      "ConstraintDescription" : "must begin with an upper case letter and contain alphanumeric characters and dashes."
+    }
+  },
+
+  "Conditions" : {
+    "UseSMS" : { "Fn::Or" : [{ "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "us-east-1" ]},
+                             { "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "us-west-2" ]},
+                             { "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "eu-west-1" ]},
+                             { "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "ap-northeast-1" ]},
+                             { "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "ap-southeast-1" ]},
+                             { "Fn::Equals" : [{ "Ref" : "AWS::Region" }, "ap-southeast-2" ]}
+                            ]}
+  },
+
+  "Resources" : {
+    "AdministratorsTopicVprabhakarEmailSubscription" : {
+      "Type" : "AWS::SNS::Subscription",
+      "Properties" : {
+        "TopicArn" : { "Fn::ImportValue" : { "Fn::Sub" : "${StandardTopicsStackName}-AdministratorsTopic" }},
+        "Protocol" : "email",
+        "Endpoint" : "vijay.prabhakar@hpe.com"
+      }
+    },
+
+    "EventsTopicVprabhakarEmailSubscription" : {
+      "Type" : "AWS::SNS::Subscription",
+      "Properties" : {
+        "TopicArn" : { "Fn::ImportValue" : { "Fn::Sub" : "${StandardTopicsStackName}-EventsTopic" }},
+        "Protocol" : "email",
+        "Endpoint" : "vijay.prabhakar@hpe.com"
+      }
+    },
+
+    "EventsSMSTopicVprabhakarSMSSubscription" : {
+      "Type" : "AWS::SNS::Subscription",
+      "Properties" : {
+        "TopicArn" : { "Fn::ImportValue" : { "Fn::Sub" : "${StandardTopicsStackName}-EventsSMSTopic" }},
+        "Protocol" : { "Fn::If" : [ "UseSMS", "sms", "email" ]},
+        "Endpoint" : { "Fn::If" : [ "UseSMS", "+16149400944", "vijay.prabhakar@hpe.com" ]}
+      }
+    },
+
+    "AlarmsTopicVprabhakarEmailSubscription" : {
+      "Type" : "AWS::SNS::Subscription",
+      "Properties" : {
+        "TopicArn" : { "Fn::ImportValue" : { "Fn::Sub" : "${StandardTopicsStackName}-AlarmsTopic" }},
+        "Protocol" : "email",
+        "Endpoint" : "vijay.prabhakar@hpe.com"
+      }
+    },
+
+    "AlarmsSMSTopicVprabhakarSMSSubscription" : {
+      "Type" : "AWS::SNS::Subscription",
+      "Properties" : {
+        "TopicArn" : { "Fn::ImportValue" : { "Fn::Sub" : "${StandardTopicsStackName}-AlarmsSMSTopic" }},
+        "Protocol" : { "Fn::If" : [ "UseSMS", "sms", "email" ]},
+        "Endpoint" : { "Fn::If" : [ "UseSMS", "+16149400944", "vijay.prabhakar@hpe.com" ]}
+      }
+    }
+  }
+}

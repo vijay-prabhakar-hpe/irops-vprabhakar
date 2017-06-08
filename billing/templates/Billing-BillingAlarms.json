@@ -1,0 +1,189 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Core-BillingAlarms Template. This creates Billing CloudWatch Alarms within the Core Account. Instead of making these configurable via Parameters, we will start out with an initial estimate and replace these as we know more about estimated charges.",
+
+  "Metadata" : {
+    "AWS::CloudFormation::Interface" : {
+      "ParameterGroups" : [
+        {
+          "Label" : { "default" : "Stack Dependencies" },
+          "Parameters" : [
+            "BillingTopicsStackName"
+          ]
+        }
+      ],
+
+      "ParameterLabels" : {
+        "BillingTopicsStackName" : { "default" : "Billing Topics Stack Name" }
+      }
+    }
+  },
+
+  "Parameters" : {
+    "BillingTopicsStackName" : {
+      "Description" : "Name of the CloudFormation Stack containing Billing Topics.",
+      "Type" : "String",
+      "MinLength" : 2,
+      "MaxLength" : 64,
+      "Default" : "BillingTopics",
+      "AllowedPattern" : "^[A-Z][-a-zA-Z0-9]*$",
+      "ConstraintDescription" : "must begin with an upper case letter and contain alphanumeric characters and dashes."
+    }
+  },
+
+  "Resources" : {
+    "BillingEstimatedCharges2000Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-2000",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $2000",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "2000",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges2500Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-2500",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $2500",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "2500",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges3000Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-3000",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $3000",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "3000",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges3500Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-3500",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $3500",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "3500",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges4000Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-4000",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $4000",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "4000",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges4500Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-4500",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $4500",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "4500",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    },
+
+    "BillingEstimatedCharges5000Alarm" : {
+      "Type" : "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "AlarmName" : "BillingEstimatedCharges-5000",
+        "AlarmDescription" : "Notify BillsTopic when AWS EstimatedCharges exceed $5000",
+        "AlarmActions" : [
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsTopic" }},
+          { "Fn::ImportValue" : { "Fn::Sub" : "${BillingTopicsStackName}-BillsSMSTopic" }}
+        ],
+        "Namespace" : "AWS/Billing",
+        "MetricName" : "EstimatedCharges",
+        "Statistic" : "Maximum",
+        "Dimensions" : [
+          { "Name" : "Currency", "Value" : "USD" }
+        ],
+        "Period" : "21600",
+        "EvaluationPeriods" : "1",
+        "Threshold" : "5000",
+        "ComparisonOperator" : "GreaterThanThreshold"
+      }
+    }
+  }
+}

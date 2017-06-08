@@ -1,0 +1,89 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Example-GetAmazonLinuxImageIdCustomResource Template. This demonstrates how to dynamically get the most recent Amazon Linux ImageId, given the Region. This template provisions an EC2 instance with an AMI ID that is based on the selected InstanceType and Region.",
+
+  "Parameters" : {
+    "AmazonLinuxVersion" : {
+      "Description" : "Amazon Linux Version",
+      "Type" : "String",
+      "Default" : "Amazon Linux 2016.09.1",
+      "AllowedValues" : [
+        "Amazon Linux",
+        "Amazon Linux 2017.03.0",
+        "Amazon Linux 2016.09.1",
+        "Amazon Linux 2016.09.0"
+      ],
+      "ConstraintDescription" : "Must be a valid Amazon Linux version."
+    },
+
+    "AmazonLinuxDate" : {
+      "Description" : "Optional Amazon Linux Date, specify to select a specific publication date for the Image",
+      "Type" : "String",
+      "Default" : "2016.12.21",
+      "AllowedPattern" : "(^$|^20(1[6-9]|[2-9][0-9])\\.(0[1-9]|1[0-2])\\.(0[1-9]|[1-2][0-9]|3[0-1])$)",
+      "ConstraintDescription" : "Must be a valid date."
+    }
+  },
+
+  "Resources" : {
+    "GetLatestAmazonLinuxImageId" : {
+      "Type" : "Custom::GetAmazonLinuxImageId",
+      "Properties" : {
+        "ServiceToken" : { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:GetAmazonLinuxImageId" },
+        "Region" : { "Ref" : "AWS::Region" }
+      }
+    },
+
+    "GetLatestVersionedAmazonLinuxImageId" : {
+      "Type" : "Custom::GetAmazonLinuxImageId",
+      "Properties" : {
+        "ServiceToken" : { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:GetAmazonLinuxImageId" },
+        "Region" : { "Ref" : "AWS::Region" },
+        "OSName" : { "Ref" : "AmazonLinuxVersion" }
+      }
+    },
+
+    "GetSpecificVersionedAmazonLinuxImageId" : {
+      "Type" : "Custom::GetAmazonLinuxImageId",
+      "Properties" : {
+        "ServiceToken" : { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:GetAmazonLinuxImageId" },
+        "Region" : { "Ref" : "AWS::Region" },
+        "OSName" : { "Ref" : "AmazonLinuxVersion" },
+        "OSDate" : { "Ref" : "AmazonLinuxDate" }
+      }
+    }
+  },
+
+  "Outputs" : {
+    "LatestImageId" : {
+      "Description" : "The Latest ImageId",
+      "Value" : { "Fn::GetAtt" : [ "GetLatestAmazonLinuxImageId", "ImageId" ]}
+    },
+
+    "LatestName" : {
+      "Description" : "The Latest Image Name",
+      "Value" : { "Fn::GetAtt" : [ "GetLatestAmazonLinuxImageId", "Name" ]}
+    },
+
+    "LatestVersionedImageId" : {
+      "Description" : "The Latest Versioned ImageId",
+      "Value" : { "Fn::GetAtt" : [ "GetLatestVersionedAmazonLinuxImageId", "ImageId" ]}
+    },
+
+    "LatestVersionedName" : {
+      "Description" : "The Latest Versioned Image Name",
+      "Value" : { "Fn::GetAtt" : [ "GetLatestVersionedAmazonLinuxImageId", "Name" ]}
+    },
+
+    "SpecificVersionedImageId" : {
+      "Description" : "The Specific Versioned ImageId",
+      "Value" : { "Fn::GetAtt" : [ "GetSpecificVersionedAmazonLinuxImageId", "ImageId" ]}
+    },
+
+    "SpecificVersionedName" : {
+      "Description" : "The Specific Versioned Image Name",
+      "Value" : { "Fn::GetAtt" : [ "GetSpecificVersionedAmazonLinuxImageId", "Name" ]}
+    }
+  }
+}
