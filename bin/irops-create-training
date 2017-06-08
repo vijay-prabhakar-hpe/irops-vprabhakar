@@ -128,6 +128,12 @@
 #     17.3. Create Staging-Integration Stack
 #     17.4. Create Production-Integration Stack
 #
+# 18. Create MiddleTier Applications
+#     18.1. Create Development-MiddleTier Stack
+#     18.2. Create Testing-MiddleTier Stack
+#     18.3. Create Staging-MiddleTier Stack
+#     18.4. Create Production-MiddleTier Stack
+#
 
 run() {
     echo
@@ -400,3 +406,15 @@ run "$applicationbindir/application-create-integration-stack -E Development"
 run "$applicationbindir/application-create-integration-stack -E Testing"
 run "$applicationbindir/application-create-integration-stack -E Staging"
 run "$applicationbindir/application-create-integration-stack -E Production"
+
+
+# 18. Create MiddleTier Instances
+#     14.1. Create Development-MiddleTier Stack
+#     14.2. Create Testing-MiddleTier Stack
+#     14.3. Create Staging-MiddleTier Stack
+#     14.4. Create Production-MiddleTier Stack
+
+run "$applicationbindir/application-create-middletier-stack -E Development -T small -Z 2"
+run "$applicationbindir/application-create-middletier-stack -E Testing -T small -Z 1"
+run "$applicationbindir/application-create-middletier-stack -E Staging -T small -Z 2"
+run "$applicationbindir/application-create-middletier-stack -E Production -T small -Z 2"

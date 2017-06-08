@@ -54,6 +54,12 @@
 #      6.3. Delete Testing-RabbitMQ Stack
 #      6.4. Delete Development-RabbitMQ Stack
 #
+#  18. Delete MiddleTier Instances
+#      18.1. Delete Production-MiddleTier Stack
+#      18.2. Delete Staging-MiddleTier Stack
+#      18.3. Delete Testing-MiddleTier Stack
+#      18.4. Delete Development-MiddleTier Stack
+#
 #  7. Delete WebSphereMQ Instances
 #      7.1. Delete Production-WebSphereMQ Stack
 #      7.2. Delete Core-WebSphereMQ Stack
@@ -255,6 +261,18 @@ run "$applicationbindir/application-delete-rabbitmq-stack -E Development"
 
 run "$applicationbindir/application-delete-webspheremq-stack -E Production"
 run "$applicationbindir/application-delete-webspheremq-stack -E Core"
+
+
+#  18. Delete MiddleTier Instances
+#      18.1. Delete Production-MiddleTier Stack
+#      18.2. Delete Staging-MiddleTier Stack
+#      18.3. Delete Testing-MiddleTier Stack
+#      18.4. Delete Development-MiddleTier Stack
+
+run "$applicationbindir/application-delete-middletier-stack -E Production"
+run "$applicationbindir/application-delete-middletier-stack -E Staging"
+run "$applicationbindir/application-delete-middletier-stack -E Testing"
+run "$applicationbindir/application-delete-middletier-stack -E Development"
 
 
 #  8. Delete OpenVPNAS Instances
